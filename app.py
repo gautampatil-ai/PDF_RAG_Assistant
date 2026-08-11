@@ -32,13 +32,17 @@ if uploaded_file:
 
     if st.button("Generate Answer"):
 
+        if not question:
+            st.warning("Please enter a question")
+            st.stop()
+
         with st.spinner("Processing PDF..."):
 
             # Load PDF
             loader = PyPDFLoader(pdf_path)
             documents = loader.load()
 
-            # Split Text
+            # Split PDF into chunks
             splitter = RecursiveCharacterTextSplitter(
                 chunk_size=500,
                 chunk_overlap=50
@@ -46,49 +50,32 @@ if uploaded_file:
 
             docs = splitter.split_documents(documents)
 
-            # Embeddings
+            # Create embeddings
             embeddings = HuggingFaceEmbeddings(
                 model_name="sentence-transformers/all-MiniLM-L6-v2"
             )
 
-            # Vector Store
+            # Create vector database
             db = FAISS.from_documents(
                 docs,
                 embeddings
             )
 
-            # Similarity Search
+            # Search
             results = db.similarity_search(
                 question,
                 k=3
             )
 
-            context = "\n".join(
-                [doc.page_content for doc in results]
-            )
-
-            # Load LLM
-            generator = pipeline(
-                task="text2text-generation",
-                model="google/flan-t5-base"
-            )
-
-            prompt = f"""
-            Answer the question using only the context below.
-
-            Context:
-            {context}
-
-            Question:
-            {question}
-            """
-
-            answer = generator(
-                prompt,
-                max_length=200,
-                do_sample=False
-            )
-
             st.subheader("Answer")
 
-            st.write(answer[0]["generated_text"])
+            if results:
+                st.write(results[0].page_content)
+            else:
+                st.write("No relevant answer found.")
+
+            st.subheader("Retrieved Chunks")
+
+            for i, doc in enumerate(results):
+                st.markdown(f"### Chunk {i+1}")
+                st.info(doc.page_content)
