@@ -1,4 +1,4 @@
-# PDF RAG Chatbot
+# 🤖 AI PDF RAG Assistant
 
 Live Link: https://pdf-rag-chatbot-h6bae56wpcbhyt8w2bartk.streamlit.app/
 
