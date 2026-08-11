@@ -5,9 +5,9 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
-# ==========================================================
+# ===================================================
 # PAGE CONFIG
-# ==========================================================
+# ===================================================
 
 st.set_page_config(
     page_title="AI PDF RAG Assistant",
@@ -15,226 +15,207 @@ st.set_page_config(
     layout="wide"
 )
 
-# ==========================================================
+# ===================================================
 # CUSTOM CSS
-# ==========================================================
+# ===================================================
 
 st.markdown("""
 <style>
 
-/* Main App */
+/* Main Background */
 .stApp {
-    background: linear-gradient(
-        135deg,
-        #0f172a,
-        #111827,
-        #1e293b
-    );
-    color: white;
+    background-color: #F8FAFC;
+}
+
+/* Header */
+.main-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #1E40AF;
+    text-align: center;
+}
+
+.sub-title {
+    text-align: center;
+    font-size: 18px;
+    color: #64748B;
+    margin-bottom: 30px;
+}
+
+/* Cards */
+.card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+/* Answer */
+.answer-box {
+    background: #EFF6FF;
+    border-left: 6px solid #2563EB;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 16px;
+    color: #111827;
 }
 
 /* Sidebar */
 section[data-testid="stSidebar"] {
-    background-color: #111827;
+    background-color: white;
 }
 
-section[data-testid="stSidebar"] * {
-    color: white !important;
-}
-
-/* Main Title */
-.main-title {
-    text-align: center;
-    font-size: 3.2rem;
-    font-weight: bold;
-    color: #60A5FA;
-    margin-bottom: 10px;
-}
-
-/* Subtitle */
-.sub-title {
-    text-align: center;
-    color: #E5E7EB;
-    font-size: 1.2rem;
-    margin-bottom: 35px;
-}
-
-/* Upload Container */
-[data-testid="stFileUploader"] {
-    background-color: #1F2937;
-    padding: 20px;
-    border-radius: 15px;
-}
-
-/* Input Box */
-.stTextInput input {
-    background-color: #1F2937 !important;
-    color: white !important;
-    border: 1px solid #3B82F6 !important;
-    border-radius: 10px !important;
-}
-
-/* Buttons */
+/* Button */
 .stButton button {
     width: 100%;
-    height: 55px;
-    border-radius: 12px;
-    background: linear-gradient(
-        to right,
-        #2563EB,
-        #3B82F6
-    );
+    height: 50px;
+    border-radius: 10px;
+    background-color: #2563EB;
     color: white;
     font-weight: bold;
-    font-size: 16px;
     border: none;
 }
 
-/* Answer Box */
-.answer-box {
-    background-color: #1E293B;
-    border-left: 6px solid #60A5FA;
-    padding: 20px;
-    border-radius: 12px;
-    color: white;
-    font-size: 16px;
-    line-height: 1.6;
+/* Input */
+.stTextInput input {
+    border-radius: 10px !important;
 }
 
-/* Metrics */
-[data-testid="metric-container"] {
-    background-color: #1F2937;
+/* Upload */
+[data-testid="stFileUploader"] {
+    background-color: white;
+    border-radius: 12px;
     padding: 15px;
-    border-radius: 12px;
-    border: 1px solid #374151;
-}
-
-/* Expander */
-.streamlit-expanderHeader {
-    color: white !important;
-    font-weight: bold;
+    border: 1px solid #CBD5E1;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# ==========================================================
+# ===================================================
 # SIDEBAR
-# ==========================================================
+# ===================================================
 
 with st.sidebar:
 
-    st.title("📚 Project Info")
+    st.title("📚 Project Dashboard")
 
     st.markdown("""
-### AI PDF RAG Assistant
+### About Project
 
-A Retrieval-Augmented Generation (RAG) project built using:
+AI PDF RAG Assistant allows users to:
 
-✅ NLP
+✅ Upload PDF files
 
-✅ Sentence Transformers
+✅ Search documents
 
-✅ Semantic Search
+✅ Retrieve relevant information
 
-✅ FAISS Vector Database
+✅ Use semantic search
 
-✅ LangChain
-
-✅ Streamlit
-""")
-
-    st.divider()
-
-    st.markdown("""
-### How To Use
-
-1️⃣ Upload a PDF
-
-2️⃣ Ask a question
-
-3️⃣ Click Generate Answer
-
-4️⃣ View retrieved context
+✅ Explore NLP applications
 
 ---
 
-### Technologies
+### Tech Stack
 
 - Python
+- Streamlit
 - LangChain
 - FAISS
-- Streamlit
-- HuggingFace Embeddings
+- HuggingFace
+- NLP
+
+---
+
+### Workflow
+
+PDF Upload
+
+⬇️
+
+Text Chunking
+
+⬇️
+
+Embeddings
+
+⬇️
+
+FAISS Search
+
+⬇️
+
+Answer Retrieval
 """)
 
-# ==========================================================
+# ===================================================
 # HEADER
-# ==========================================================
+# ===================================================
 
-st.markdown(
-"""
+st.markdown("""
 <div class="main-title">
 🤖 AI PDF RAG Assistant
 </div>
 
 <div class="sub-title">
-Ask intelligent questions from your PDF documents using NLP, Embeddings and Vector Search
+Retrieval-Augmented Generation using NLP, Embeddings, FAISS and LangChain
 </div>
-""",
-unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
-# ==========================================================
-# DASHBOARD METRICS
-# ==========================================================
+# ===================================================
+# SYSTEM OVERVIEW
+# ===================================================
 
 st.markdown("## 📊 System Overview")
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric(
-        "Embedding Model",
-        "MiniLM"
-    )
+    st.info("""
+### 🧠 Embedding Model
+
+MiniLM
+""")
 
 with col2:
-    st.metric(
-        "Vector Database",
-        "FAISS"
-    )
+    st.success("""
+### 📚 Vector Database
+
+FAISS
+""")
 
 with col3:
-    st.metric(
-        "Framework",
-        "LangChain"
-    )
+    st.warning("""
+### ⚡ Framework
+
+LangChain
+""")
 
 st.markdown("---")
 
-# ==========================================================
-# FILE UPLOAD
-# ==========================================================
+# ===================================================
+# INPUT SECTION
+# ===================================================
 
-st.markdown("## 📄 Upload Your PDF")
+left, right = st.columns(2)
 
-uploaded_file = st.file_uploader(
-    "",
-    type=["pdf"]
-)
+with left:
+    uploaded_file = st.file_uploader(
+        "📄 Upload PDF",
+        type=["pdf"]
+    )
 
-# ==========================================================
-# QUESTION INPUT
-# ==========================================================
+with right:
+    question = st.text_input(
+        "❓ Ask a Question"
+    )
 
-question = st.text_input(
-    "❓ Ask a Question"
-)
-
-# ==========================================================
-# PROCESS
-# ==========================================================
+# ===================================================
+# PROCESSING
+# ===================================================
 
 if uploaded_file:
 
@@ -255,10 +236,9 @@ if uploaded_file:
 
             st.stop()
 
-        with st.spinner("🔍 Searching PDF Content..."):
+        with st.spinner("Processing PDF..."):
 
             loader = PyPDFLoader(pdf_path)
-
             documents = loader.load()
 
             splitter = RecursiveCharacterTextSplitter(
@@ -312,19 +292,7 @@ if uploaded_file:
             for i, doc in enumerate(results):
 
                 with st.expander(
-                    f"Chunk {i+1}"
+                    f"📄 Context Chunk {i+1}"
                 ):
 
                     st.write(
-                        doc.page_content
-                    )
-
-# ==========================================================
-# FOOTER
-# ==========================================================
-
-st.markdown("---")
-
-st.caption(
-    "🚀 Built using Streamlit • LangChain • FAISS • Sentence Transformers"
-)
