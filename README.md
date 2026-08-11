@@ -1,6 +1,6 @@
-# pdf-rag-chatbot
-
 # PDF RAG Chatbot
+
+Live Link: https://pdf-rag-chatbot-h6bae56wpcbhyt8w2bartk.streamlit.app/
 
 A Retrieval-Augmented Generation (RAG) chatbot that answers questions from uploaded PDF documents.
 
