@@ -5,8 +5,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
-from transformers import pipeline
-
 st.set_page_config(
     page_title="PDF RAG Chatbot",
     page_icon="📚"
@@ -93,12 +91,4 @@ if uploaded_file:
 
             st.subheader("Answer")
 
-            st.write(
-                answer[0]["generated_text"]
-            )
-
-            st.subheader("Retrieved Chunks")
-
-            for i, doc in enumerate(results):
-                st.write(f"Chunk {i+1}")
-                st.info(doc.page_content[:500])
+            st.write(answer[0]["generated_text"])
