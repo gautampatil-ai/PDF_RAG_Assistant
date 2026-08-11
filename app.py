@@ -71,7 +71,7 @@ if uploaded_file:
 
             # Load LLM
             generator = pipeline(
-                "text2text-generation",
+                task="text2text-generation",
                 model="google/flan-t5-base"
             )
 
