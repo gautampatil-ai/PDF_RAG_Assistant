@@ -5,202 +5,199 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
-# ===================================================
+# --------------------------------------------------
 # PAGE CONFIG
-# ===================================================
+# --------------------------------------------------
 
 st.set_page_config(
-    page_title="AI PDF RAG Assistant",
+    page_title="AI PDF Assistant",
     page_icon="🤖",
     layout="wide"
 )
 
-# ===================================================
+# --------------------------------------------------
 # CUSTOM CSS
-# ===================================================
+# --------------------------------------------------
 
 st.markdown("""
 <style>
 
-/* Main Background */
 .stApp {
-    background-color: #F8FAFC;
+    background-color: #f4f7fc;
 }
 
 /* Header */
 .main-title {
-    font-size: 48px;
-    font-weight: 700;
-    color: #1E40AF;
     text-align: center;
+    font-size: 50px;
+    font-weight: 800;
+    color: #2563eb;
 }
 
 .sub-title {
     text-align: center;
     font-size: 18px;
-    color: #64748B;
+    color: #475569;
     margin-bottom: 30px;
-}
-
-/* Cards */
-.card {
-    background-color: white;
-    padding: 20px;
-    border-radius: 15px;
-    border: 1px solid #E2E8F0;
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
-    text-align: center;
-}
-
-/* Answer */
-.answer-box {
-    background: #EFF6FF;
-    border-left: 6px solid #2563EB;
-    padding: 20px;
-    border-radius: 12px;
-    font-size: 16px;
-    color: #111827;
 }
 
 /* Sidebar */
 section[data-testid="stSidebar"] {
-    background-color: white;
+    background: #1e3a8a;
+}
+
+section[data-testid="stSidebar"] * {
+    color: white !important;
+}
+
+/* Cards */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.08);
+}
+
+/* File uploader */
+[data-testid="stFileUploader"] {
+    background: white;
+    padding: 15px;
+    border: 2px solid #bfdbfe;
+    border-radius: 15px;
+}
+
+/* Text box */
+.stTextInput input {
+    background: white !important;
+    color: black !important;
+    border: 2px solid #60a5fa !important;
+    border-radius: 12px !important;
 }
 
 /* Button */
 .stButton button {
-    width: 100%;
-    height: 50px;
+    background: #2563eb !important;
+    color: white !important;
     border-radius: 10px;
-    background-color: #2563EB;
-    color: white;
+    height: 50px;
     font-weight: bold;
-    border: none;
+    width: 100%;
 }
 
-/* Input */
-.stTextInput input {
-    border-radius: 10px !important;
-}
-
-/* Upload */
-[data-testid="stFileUploader"] {
-    background-color: white;
+/* Answer box */
+.answer-box {
+    background: white;
+    border-left: 6px solid #2563eb;
     border-radius: 12px;
-    padding: 15px;
-    border: 1px solid #CBD5E1;
+    padding: 20px;
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.08);
+    color: black;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# ===================================================
+# --------------------------------------------------
 # SIDEBAR
-# ===================================================
+# --------------------------------------------------
 
 with st.sidebar:
 
-    st.title("📚 Project Dashboard")
+    st.title("🤖 AI PDF Assistant")
 
     st.markdown("""
-### About Project
+### Features
 
-AI PDF RAG Assistant allows users to:
+✅ Upload PDF
 
-✅ Upload PDF files
+✅ Semantic Search
 
-✅ Search documents
+✅ NLP Processing
 
-✅ Retrieve relevant information
+✅ FAISS Vector Search
 
-✅ Use semantic search
+✅ LangChain Integration
 
-✅ Explore NLP applications
-
----
-
-### Tech Stack
-
-- Python
-- Streamlit
-- LangChain
-- FAISS
-- HuggingFace
-- NLP
+✅ Streamlit Deployment
 
 ---
 
 ### Workflow
 
-PDF Upload
+📄 PDF Upload
 
 ⬇️
 
-Text Chunking
+✂️ Text Chunking
 
 ⬇️
 
-Embeddings
+🧠 Embeddings
 
 ⬇️
 
-FAISS Search
+📚 FAISS Search
 
 ⬇️
 
-Answer Retrieval
+🎯 Answer Retrieval
 """)
 
-# ===================================================
+# --------------------------------------------------
 # HEADER
-# ===================================================
+# --------------------------------------------------
 
 st.markdown("""
 <div class="main-title">
-🤖 AI PDF RAG Assistant
+🤖 AI PDF Assistant
 </div>
 
 <div class="sub-title">
-Retrieval-Augmented Generation using NLP, Embeddings, FAISS and LangChain
+Chat with your PDF using NLP, FAISS and LangChain
 </div>
 """, unsafe_allow_html=True)
 
-# ===================================================
-# SYSTEM OVERVIEW
-# ===================================================
+# --------------------------------------------------
+# DASHBOARD
+# --------------------------------------------------
 
 st.markdown("## 📊 System Overview")
 
-col1, col2, col3 = st.columns(3)
+c1, c2, c3 = st.columns(3)
 
-with col1:
-    st.info("""
-### 🧠 Embedding Model
+with c1:
+    st.markdown("""
+    <div class='card'>
+    <h3>🧠 Model</h3>
+    <h2>MiniLM</h2>
+    </div>
+    """, unsafe_allow_html=True)
 
-MiniLM
-""")
+with c2:
+    st.markdown("""
+    <div class='card'>
+    <h3>📚 Database</h3>
+    <h2>FAISS</h2>
+    </div>
+    """, unsafe_allow_html=True)
 
-with col2:
-    st.success("""
-### 📚 Vector Database
+with c3:
+    st.markdown("""
+    <div class='card'>
+    <h3>⚡ Framework</h3>
+    <h2>LangChain</h2>
+    </div>
+    """, unsafe_allow_html=True)
 
-FAISS
-""")
+st.markdown("<br>", unsafe_allow_html=True)
 
-with col3:
-    st.warning("""
-### ⚡ Framework
-
-LangChain
-""")
-
-st.markdown("---")
-
-# ===================================================
+# --------------------------------------------------
 # INPUT SECTION
-# ===================================================
+# --------------------------------------------------
 
-left, right = st.columns(2)
+left, right = st.columns([1,1])
 
 with left:
     uploaded_file = st.file_uploader(
@@ -213,9 +210,9 @@ with right:
         "❓ Ask a Question"
     )
 
-# ===================================================
-# PROCESSING
-# ===================================================
+# --------------------------------------------------
+# PROCESS
+# --------------------------------------------------
 
 if uploaded_file:
 
@@ -229,11 +226,7 @@ if uploaded_file:
     if st.button("🚀 Generate Answer"):
 
         if not question.strip():
-
-            st.warning(
-                "Please enter a question."
-            )
-
+            st.warning("Enter a question first.")
             st.stop()
 
         with st.spinner("Processing PDF..."):
@@ -246,9 +239,7 @@ if uploaded_file:
                 chunk_overlap=50
             )
 
-            docs = splitter.split_documents(
-                documents
-            )
+            docs = splitter.split_documents(documents)
 
             embeddings = HuggingFaceEmbeddings(
                 model_name="sentence-transformers/all-MiniLM-L6-v2"
@@ -277,22 +268,30 @@ if uploaded_file:
                     unsafe_allow_html=True
                 )
 
-            else:
+                st.markdown("## 📖 Retrieved Context")
 
-                st.warning(
-                    "No answer found."
-                )
+                for i, doc in enumerate(results):
 
-            st.markdown("---")
+                    with st.expander(
+                        f"Context Chunk {i+1}"
+                    ):
+                        st.write(doc.page_content)
 
-            st.markdown(
-                "## 📖 Retrieved Context"
-            )
+# --------------------------------------------------
+# FOOTER
+# --------------------------------------------------
 
-            for i, doc in enumerate(results):
+st.markdown("---")
 
-                with st.expander(
-                    f"📄 Context Chunk {i+1}"
-                ):
+st.markdown("""
+### 👨‍💻 Data Science Portfolio Project
 
-                    st.write(
+Built with:
+
+- Streamlit
+- LangChain
+- FAISS
+- NLP
+- RAG Architecture
+- HuggingFace Embeddings
+""")
