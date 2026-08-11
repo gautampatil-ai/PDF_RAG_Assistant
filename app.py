@@ -5,9 +5,9 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
-# --------------------------------------------------
+# =====================================================
 # PAGE CONFIG
-# --------------------------------------------------
+# =====================================================
 
 st.set_page_config(
     page_title="AI PDF Assistant",
@@ -15,139 +15,150 @@ st.set_page_config(
     layout="wide"
 )
 
-# --------------------------------------------------
-# CUSTOM CSS
-# --------------------------------------------------
+# =====================================================
+# CSS
+# =====================================================
 
 st.markdown("""
 <style>
 
-.stApp {
-    background-color: #f4f7fc;
-}
-
-/* Header */
-.main-title {
-    text-align: center;
-    font-size: 50px;
-    font-weight: 800;
-    color: #2563eb;
-}
-
-.sub-title {
-    text-align: center;
-    font-size: 18px;
-    color: #475569;
-    margin-bottom: 30px;
+/* Main background */
+.stApp{
+    background-color:#F5F9FF;
 }
 
 /* Sidebar */
-section[data-testid="stSidebar"] {
-    background: #1e3a8a;
+section[data-testid="stSidebar"]{
+    background:linear-gradient(180deg,#2563EB,#1D4ED8);
 }
 
-section[data-testid="stSidebar"] * {
-    color: white !important;
+section[data-testid="stSidebar"] *{
+    color:white !important;
+}
+
+/* Header */
+.main-title{
+    text-align:center;
+    color:#1E40AF;
+    font-size:55px;
+    font-weight:bold;
+}
+
+.sub-title{
+    text-align:center;
+    color:#475569;
+    font-size:18px;
+    margin-bottom:25px;
 }
 
 /* Cards */
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0px 3px 10px rgba(0,0,0,0.08);
+.metric-box{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    border:1px solid #E2E8F0;
+    box-shadow:0px 4px 10px rgba(0,0,0,0.08);
 }
 
-/* File uploader */
-[data-testid="stFileUploader"] {
-    background: white;
-    padding: 15px;
-    border: 2px solid #bfdbfe;
-    border-radius: 15px;
+/* Upload Area */
+[data-testid="stFileUploader"]{
+    background:white;
+    padding:15px;
+    border-radius:15px;
+    border:2px solid #BFDBFE;
 }
 
-/* Text box */
-.stTextInput input {
-    background: white !important;
-    color: black !important;
-    border: 2px solid #60a5fa !important;
-    border-radius: 12px !important;
+/* Input */
+.stTextInput input{
+    background:white !important;
+    color:black !important;
+    border:2px solid #60A5FA !important;
+    border-radius:10px !important;
 }
 
 /* Button */
-.stButton button {
-    background: #2563eb !important;
-    color: white !important;
-    border-radius: 10px;
-    height: 50px;
-    font-weight: bold;
-    width: 100%;
+.stButton button{
+    background:#2563EB !important;
+    color:white !important;
+    width:100%;
+    height:50px;
+    border:none;
+    border-radius:10px;
+    font-size:18px;
+    font-weight:bold;
 }
 
-/* Answer box */
-.answer-box {
-    background: white;
-    border-left: 6px solid #2563eb;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0px 3px 10px rgba(0,0,0,0.08);
-    color: black;
+/* Answer Box */
+.answer-box{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    border-left:6px solid #2563EB;
+    box-shadow:0px 4px 10px rgba(0,0,0,0.08);
+    color:black;
+    font-size:16px;
+}
+
+/* Headings */
+h1,h2,h3{
+    color:#1E293B !important;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# --------------------------------------------------
+# =====================================================
 # SIDEBAR
-# --------------------------------------------------
+# =====================================================
 
 with st.sidebar:
 
     st.title("🤖 AI PDF Assistant")
 
     st.markdown("""
-### Features
+### About
 
-✅ Upload PDF
+This RAG project uses:
+
+✅ NLP
+
+✅ LangChain
+
+✅ FAISS
+
+✅ HuggingFace Embeddings
 
 ✅ Semantic Search
 
-✅ NLP Processing
-
-✅ FAISS Vector Search
-
-✅ LangChain Integration
-
-✅ Streamlit Deployment
+✅ Streamlit
 
 ---
 
-### Workflow
+### How To Use
 
-📄 PDF Upload
+1. Upload PDF
 
-⬇️
+2. Enter Question
 
-✂️ Text Chunking
+3. Click Generate Answer
 
-⬇️
+4. View Results
 
-🧠 Embeddings
+---
 
-⬇️
+### Project Type
 
-📚 FAISS Search
+Data Science
 
-⬇️
+Natural Language Processing
 
-🎯 Answer Retrieval
+Retrieval Augmented Generation
 """)
 
-# --------------------------------------------------
+# =====================================================
 # HEADER
-# --------------------------------------------------
+# =====================================================
 
 st.markdown("""
 <div class="main-title">
@@ -155,49 +166,49 @@ st.markdown("""
 </div>
 
 <div class="sub-title">
-Chat with your PDF using NLP, FAISS and LangChain
+Chat with your PDF using NLP, Embeddings and Vector Search
 </div>
 """, unsafe_allow_html=True)
 
-# --------------------------------------------------
-# DASHBOARD
-# --------------------------------------------------
+# =====================================================
+# METRICS
+# =====================================================
 
 st.markdown("## 📊 System Overview")
 
-c1, c2, c3 = st.columns(3)
+col1,col2,col3 = st.columns(3)
 
-with c1:
+with col1:
     st.markdown("""
-    <div class='card'>
-    <h3>🧠 Model</h3>
-    <h2>MiniLM</h2>
+    <div class="metric-box">
+        <h3>🧠 Model</h3>
+        <h2>MiniLM</h2>
     </div>
     """, unsafe_allow_html=True)
 
-with c2:
+with col2:
     st.markdown("""
-    <div class='card'>
-    <h3>📚 Database</h3>
-    <h2>FAISS</h2>
+    <div class="metric-box">
+        <h3>📚 Database</h3>
+        <h2>FAISS</h2>
     </div>
     """, unsafe_allow_html=True)
 
-with c3:
+with col3:
     st.markdown("""
-    <div class='card'>
-    <h3>⚡ Framework</h3>
-    <h2>LangChain</h2>
+    <div class="metric-box">
+        <h3>⚡ Framework</h3>
+        <h2>LangChain</h2>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# --------------------------------------------------
-# INPUT SECTION
-# --------------------------------------------------
+# =====================================================
+# PDF + QUESTION
+# =====================================================
 
-left, right = st.columns([1,1])
+left,right = st.columns(2)
 
 with left:
     uploaded_file = st.file_uploader(
@@ -207,18 +218,18 @@ with left:
 
 with right:
     question = st.text_input(
-        "❓ Ask a Question"
+        "❓ Ask Question"
     )
 
-# --------------------------------------------------
+# =====================================================
 # PROCESS
-# --------------------------------------------------
+# =====================================================
 
 if uploaded_file:
 
-    pdf_path = "temp.pdf"
+    pdf_path="temp.pdf"
 
-    with open(pdf_path, "wb") as f:
+    with open(pdf_path,"wb") as f:
         f.write(uploaded_file.getbuffer())
 
     st.success("✅ PDF Uploaded Successfully")
@@ -226,10 +237,10 @@ if uploaded_file:
     if st.button("🚀 Generate Answer"):
 
         if not question.strip():
-            st.warning("Enter a question first.")
+            st.warning("Please enter a question.")
             st.stop()
 
-        with st.spinner("Processing PDF..."):
+        with st.spinner("Analyzing PDF..."):
 
             loader = PyPDFLoader(pdf_path)
             documents = loader.load()
@@ -239,7 +250,9 @@ if uploaded_file:
                 chunk_overlap=50
             )
 
-            docs = splitter.split_documents(documents)
+            docs = splitter.split_documents(
+                documents
+            )
 
             embeddings = HuggingFaceEmbeddings(
                 model_name="sentence-transformers/all-MiniLM-L6-v2"
@@ -268,25 +281,28 @@ if uploaded_file:
                     unsafe_allow_html=True
                 )
 
-                st.markdown("## 📖 Retrieved Context")
+            st.markdown("## 📖 Retrieved Context")
 
-                for i, doc in enumerate(results):
+            for i, doc in enumerate(results):
 
-                    with st.expander(
-                        f"Context Chunk {i+1}"
-                    ):
-                        st.write(doc.page_content)
+                with st.expander(
+                    f"Context Chunk {i+1}"
+                ):
 
-# --------------------------------------------------
+                    st.write(
+                        doc.page_content
+                    )
+
+# =====================================================
 # FOOTER
-# --------------------------------------------------
+# =====================================================
 
 st.markdown("---")
 
 st.markdown("""
-### 👨‍💻 Data Science Portfolio Project
+### 👨‍💻 Portfolio Project
 
-Built with:
+Built using:
 
 - Streamlit
 - LangChain
@@ -294,4 +310,6 @@ Built with:
 - NLP
 - RAG Architecture
 - HuggingFace Embeddings
+
+⭐ Ideal for Data Science & AI Portfolio
 """)
